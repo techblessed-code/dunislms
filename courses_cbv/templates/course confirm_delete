@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Delete</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="body">
+        <div class="page-stack">
+
+            <section class="page-hero">
+                <p class="eyebrow">Delete Course</p>
+                <h1>Delete "{{ object.title }}"?</h1>
+                <p class="page-subtitle">
+                    This action is permanent, so take a moment to be sure.
+                </p>
+            </section>
+
+            <section class="panel danger-panel form-panel">
+                <p class="danger-copy">
+                    Once this course is deleted, it cannot be recovered.
+                </p>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="form-actions">
+                        <button class="btn btn-danger" type="submit">
+                            Confirm Delete
+                        </button>
+
+                        <a class="btn btn-nav"
+                           href="{% url 'courses_cbv:course_detail' pk=object.pk %}">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </section>
+
+        </div>
+    </div>
+</body>
+</html>
+Not connected. Connecting in 2:59…
+Try now

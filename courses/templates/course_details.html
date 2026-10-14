@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details</title>
+</head>
+<body>
+    <h2>{{ course.title}}</h2>
+    <p><strong>Duration:</strong> {{ course.duration}}</p>
+    <p><strong>Description:</strong> {{ course.description}}</p>
+    <p><strong>Instructor:</strong> {{ course.instructor.name}}</p>
+    {% if course.image %}
+       <img src="{{ course.image.url }}" alt="{{ course.title}}" width="300">
+    {% endif %}
+</body>
+</html>

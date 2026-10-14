@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="body">
+        <div class="page-stack">
+
+            <section class="page-hero">
+                <p class="eyebrow">Course Detail</p>
+                <h1>{{ course.title }}</h1>
+                <p class="page-subtitle">
+                    Review the full course information and manage this record from the class-based view.
+                </p>
+            </section>
+
+            <section class="panel detail-layout">
+
+                <div class="detail-media">
+                    {% if course.image %}
+                        <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                    {% else %}
+                        <div class="detail-placeholder">No image available</div>
+                    {% endif %}
+                </div>
+
+                <div class="detail-content">
+                    <h2 class="detail-title">{{ course.title }}</h2>
+
+                    <div class="course-meta-grid">
+
+                        <p class="course-meta">
+                            <span class="course-meta-label">Duration</span>
+                            <span class="course-meta-value">{{ course.duration }} hours</span>
+                        </p>
+
+                        <p class="course-meta">
+                            <span class="course-meta-label">Instructor</span>
+                            <span class="course-meta-value">
+                                {% if course.instructor %}
+                                    {{ course.instructor.name }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </span>
+                        </p>
+
+                    </div>
+
+                    <p class="detail-description">
+                        {{ course.description|default_if_none:"No description available." }}
+                    </p>
+
+                    <div class="detail-actions">
+                        <a class="btn btn-nav btn-nav-primary"
+                           href="{% url 'courses_cbv:course_list' %}">
+                            Back to Courses
+                        </a>
+
+                        <a class="btn btn-secondary"
+                           href="{% url 'courses_cbv:course_update' pk=course.pk %}">
+                            Update
+                        </a>
+
+                        <a class="btn btn-danger"
+                           href="{% url 'courses_cbv:course_delete' pk=course.pk %}">
+                            Delete
+                        </a>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+    </div>
+</body>
+</html>
+Not connected. Connecting in 1s…
+Try now

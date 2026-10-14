@@ -1,0 +1,51 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Course</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="body">
+        <div class="page-stack">
+
+            <section class="page-hero">
+                <p class="eyebrow">Course Form</p>
+                <h1>Update Course</h1>
+                <p class="page-subtitle">
+                    Edit the course information and save the updated record.
+                </p>
+            </section>
+
+            <section class="panel form-panel">
+                <p class="form-intro">
+                    Review the existing values, make your changes, and submit the form to update the course.
+                </p>
+
+                <form class="form-layout" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" type="submit">
+                            Update Course
+                        </button>
+
+                        <a class="btn btn-nav"
+                           href="{% url 'courses_cbv:course_list' %}">
+                            Back to Courses
+                        </a>
+                    </div>
+                </form>
+            </section>
+
+        </div>
+    </div>
+</body>
+</html>
+Not connected. Connecting in 3:33…
+Try now

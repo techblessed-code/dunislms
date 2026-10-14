@@ -1,0 +1,150 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="body">
+
+        <section class="page-hero">
+            <p class="eyebrow">Course Management</p>
+            <h1>Courses</h1>
+            <p class="page-subtitle">
+                Review the catalog and manage each course from one place.
+            </p>
+        </section>
+
+        <div class="course-grid">
+            {% if courses %}
+                {% for course in courses %}
+                    <article class="course-card">
+
+                        <div class="course-media">
+                            {% if course.image %}
+                                <img class="course-image"
+                                     src="{{ course.image.url }}"
+                                     alt="{{ course.title }}">
+                            {% else %}
+                                <div class="course-image placeholder">
+                                    No image
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="course-content">
+                            <h3 class="course-title">
+                                <a href="{% url 'courses_cbv:course_detail' pk=course.pk %}">
+                                    {{ course.title }}
+                                </a>
+                            </h3>
+
+                            <p class="course-desc">
+                                {{ course.description|default_if_none:''|truncatechars:120 }}
+                            </p>
+
+                            <div class="course-meta-grid">
+
+                                <p class="course-meta">
+                                    <span class="course-meta-label">Duration</span>
+                                    <span class="course-meta-value">
+                                        {{ course.duration }}
+                                    </span>
+                                </p>
+
+                                <p class="course-meta">
+                                    <span class="course-meta-label">Instructor</span>
+                                    <span class="course-meta-value">
+                                        {% if course.instructor %}
+                                            {{ course.instructor.name }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </span>
+                                </p>
+
+                            </div>
+                        </div>
+
+                        <div class="course-actions">
+                            <a class="btn btn-primary icon-btn"
+                               href="{% url 'courses_cbv:course_detail' pk=course.pk %}">
+                                <span class="icon" aria-hidden="true">
+                                    <svg class="action-icon"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 24 24"
+                                         width="24">
+                                    </svg>
+                                </span>
+                            </a>
+
+                            <a class="btn btn-secondary icon-btn"
+                               href="{% url 'courses_cbv:course_update' pk=course.pk %}">
+                                <span class="icon" aria-hidden="true">
+                                    <svg class="action-icon"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 24 24"
+                                         width="24">
+                                    </svg>
+                                </span>
+                            </a>
+
+                            <a class="btn btn-danger icon-btn"
+                               href="{% url 'courses_cbv:course_delete' pk=course.pk %}">
+                                <span class="icon" aria-hidden="true">
+                                    <svg class="action-icon"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 24 24"
+                                         width="24">
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+
+                    </article>
+                {% endfor %}
+            {% else %}
+                <p class="empty-state">No courses available.</p>
+            {% endif %}
+        </div>
+
+        <nav class="course-nav">
+            <a class="btn btn-nav" href="{% url 'courses:course_list' %}">
+                Back
+            </a>
+
+            <a class="btn btn-nav btn-nav-primary"
+               href="{% url 'courses:create_course' %}">
+                Create Course
+            </a>
+
+            <a class="btn btn-nav" href="{% url 'courses:about' %}">
+                About
+            </a>
+
+            <a class="btn btn-nav" href="{% url 'admin:index' %}">
+                Admin
+            </a>
+
+            <a class="btn btn-nav" href="{% url 'users:login' %}">
+                Login
+            </a>
+
+            {% if not request.resolver_match or request.resolver_match.namespace != 'courses_cbv' %}
+                <a class="btn btn-nav"
+                   href="{% url 'courses_cbv:course_list' %}">
+                    CBV Course List
+                </a>
+            {% endif %}
+        </nav>
+
+    </div>
+</body>
+</html>
+Not connected. Connecting in 1:45…
+Try now

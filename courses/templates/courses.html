@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+</head>
+<body>
+    <h1>Lectures</h1>
+
+    <table border = 1 width="100%" >
+        <thead>
+            <tr>
+                <td>Name</td>
+                <td>Tutor</td>
+                <td>Time</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for lecture in lectures %}
+
+        <tr>
+           <td>{{ lecture.name }}</td>
+           <td>{{ lecture.tutor }}</td>
+           <td>{{ lecture.time }}</td>
+        </tr>
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+</body>
+</html>
