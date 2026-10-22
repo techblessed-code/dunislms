@@ -2,4 +2,7 @@ __pycache__/
 env/
 .env
 *.db
-
+db.sqlite3
+*.sqlite3
+*.pdf
+staticfiles/

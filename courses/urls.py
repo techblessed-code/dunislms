@@ -1,6 +1,10 @@
 from django.urls import path
 from . import  views
 
+# Namespace so URLs are reversed as 'courses:...' everywhere
+# (templates and tests already use the courses:... prefix).
+app_name = 'courses'
+
 urlpatterns = [
     path('', views.course_list, name='course_list'),
     path('about/', views.about, name='about'),
@@ -10,4 +14,3 @@ urlpatterns = [
     path('admin/', views.course_list, name='admin_course_list')
 
  ]
-

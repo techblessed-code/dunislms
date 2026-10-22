@@ -26,7 +26,9 @@ urlpatterns = [
 
     path('courses/', include('courses.urls')),
 
-    path('about/', course_views.course_about, name='about'),
+    # /about/ previously pointed at course_list, so the "about" URL showed the
+    # course list. It now renders the real about page.
+    path('about/', course_views.about, name='about'),
 
     path('users/', include('users.urls')),
 

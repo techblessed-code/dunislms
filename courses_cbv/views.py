@@ -1,6 +1,7 @@
 
 from django.shortcuts import render
 # Class-based views
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from courses.models import Course
@@ -8,14 +9,18 @@ from courses.forms import CourseForm
 
 # ListView for courses
 class CourseListView(ListView):
-    model = Course
+    # order_by keeps paginated pages stable (avoids UnorderedObjectListWarning)
+    queryset = Course.objects.order_by('pk')
     template_name = 'courses_cbv/course_list.html'
     context_object_name = 'courses'
     paginate_by = 100 # Optional: Add pagination if you have many courses
 
 
 # CreateView for creating a new course
-class CourseCreateView(CreateView):
+# LoginRequiredMixin: mutating views require a logged-in user, matching the
+# @login_required on the function-based create_course view (they were open
+# to anonymous visitors before).
+class CourseCreateView(LoginRequiredMixin, CreateView):
     model = Course
     form_class = CourseForm
     template_name = 'courses_cbv/create_course.html'

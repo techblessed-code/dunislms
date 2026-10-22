@@ -3,18 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-Home</head>
+    <title>Home</title>
+</head>
 <body>
     <h1>Welcome to Blessed Learning Management Systems lms</h1>
     <p>Explore our courses and start learning</p>
 
     <ul>
-        <li><a href="{% url 'course_list' %}">View Courses</a></li>
+        <li><a href="{% url 'courses:course_list' %}">View Courses</a></li>
         <li><a href="{% url 'blog' %}">Blog</a></li>
-        <li><a href="{% url 'course_table' %}">Course Table</a></li>
-        <li><a href="{% url 'login' %}">Login</a></li>
-        <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li><a href="{% url 'courses:course_table' %}">Course Table</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'users:login' %}">Login</a></li>
+        <li><a href="{% url 'users:dashboard' %}">Dashboard</a></li>
         <li><a href="{% url 'course_crud_api' %}">Course API</a></li>
     </ul>
+
+    {% comment %}
+      Fixed: this used to be a plain <a href> to the logout URL. Since
+      Django 5.0 LogoutView only accepts POST, so the old link returned 405.
+    {% endcomment %}
+    <form action="{% url 'users:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
 </body>
 </html>

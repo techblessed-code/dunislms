@@ -6,6 +6,8 @@
     <title>Course Details</title>
 </head>
 <body>
+    <p><a href="{% url 'courses:course_list' %}">&larr; Back to courses</a></p>
+
     <h2>{{ course.title}}</h2>
     <p><strong>Duration:</strong> {{ course.duration}}</p>
     <p><strong>Description:</strong> {{ course.description}}</p>

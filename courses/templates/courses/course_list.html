@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <style>
+    
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .card-title a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card-text {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #777;
+            padding: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Courses</h1>
+
+    {% comment %}
+      Fixed: cards used to sit directly inside a <ul> (invalid HTML), the
+      .card-container div was never closed, a stray {{ course.title }} <li>
+      duplicated every title, and the cards did not link anywhere. There is
+      also an empty-state message now (asserted by the tests).
+    {% endcomment %}
+
+    <div class="card-container">
+        {% for course in courses %}
+            <div class="card">
+                {% if course.image %}
+                    <a href="{% url 'courses:course_details' course.id %}">
+                        <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                    </a>
+                {% else %}
+                    <img src="" alt="{{ course.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <div class="card-title">
+                        <a href="{% url 'courses:course_details' course.id %}">{{ course.title }}</a>
+                    </div>
+                    <div class="card-text">{{ course.description|truncatewords:20 }}</div>
+                    <div class="card-text">{{ course.instructor }}</div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="empty-state">No courses available</p>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'courses:create_course' %}">Create New Course</a>
+</body>
+</html>

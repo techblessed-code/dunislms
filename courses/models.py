@@ -28,6 +28,8 @@ class Category(models.Model):
 
 
     def __str__(self):
-
-        return self.category
+        # Bug fix: this used to return self.category, which does not exist on
+        # this model - any str(category) call (admin lists, forms, shell)
+        # crashed with AttributeError. The model's text field is 'name'.
+        return self.name
     

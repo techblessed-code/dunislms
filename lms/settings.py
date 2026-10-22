@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'users',
     'courses_api',
     'courses_cbv'
-    
+
 ]
 
 MIDDLEWARE = [
@@ -66,7 +66,9 @@ LOGOUT_REDIRECT_URL = '/users/login'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, 'lms', 'templates' ],
+        # Project-wide template folder. App templates (e.g. courses/templates/…)
+        # are found automatically thanks to APP_DIRS below.
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,7 +131,12 @@ USE_TZ = True
 
 #STATIC FILES
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR,'lms', 'static']
+# Project-wide static assets only. App static files (e.g. courses/static/…,
+# courses_cbv/static/…) are found automatically by AppDirectoriesFinder.
+# NOTE: BASE_DIR must never be listed here - it would expose manage.py,
+# db.sqlite3 etc. under /static/ and break collectstatic (STATIC_ROOT lives
+# inside BASE_DIR).
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR  /  'staticfiles'
 
 #MEDIA FILES
@@ -141,8 +148,13 @@ MEDIA_ROOT = BASE_DIR  /  'media'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'Deny'
 CSRF_COOKIE_HTTPONLY = True
-SECURE_BROWSER_XXS_FILTER = True
+# The old `SECURE_BROWSER_XXS_FILTER` line was removed: the name was misspelled
+# (correct name: SECURE_BROWSER_XSS_FILTER) so Django ignored it entirely, and
+# modern browsers dropped XSS filtering anyway - the header is obsolete.
 # SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
+# Secure cookies travel over HTTPS only. Keep them off while developing on
+# http://127.0.0.1 (a plain-HTTP origin would otherwise never receive the
+# session/CSRF cookies and every login would fail). They switch on
+# automatically whenever DEBUG is turned off for a real HTTPS deployment.
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG

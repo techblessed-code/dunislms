@@ -9,11 +9,14 @@
     <h1>Create a New Course</h1>
     <form method="post" enctype="multipart/form-data">
         {% comment %}
-          {% csrf_token %} 
+          Bug fix: {% csrf_token %} used to be commented out here, so every
+          course-creation POST failed with a 403 (CSRF verification failed).
         {% endcomment %}
+        {% csrf_token %}
 
         {{ form.as_p }}
         <button type="submit">Create Course</button>
+        <a href="{% url 'courses:course_list' %}">Cancel</a>
     </form>
 </body> 
 </html>
