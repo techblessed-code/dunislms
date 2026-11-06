@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <!-- Brand panel -->
+    <div class="auth-side">
+        <span class="eyebrow">Join Dunis LMS</span>
+        <h2>Create your account<br>and start learning.</h2>
+        <p>Free registration — your dashboard is ready the moment you sign up.</p>
+        <ul>
+            <li>Browse all software &amp; full-stack courses</li>
+            <li>Track your learning from your dashboard</li>
+            <li>Takes less than a minute</li>
+        </ul>
+    </div>
+
+    <!-- Form panel -->
+    <div class="auth-main">
+        <div class="auth-card">
+            <h1>Create account</h1>
+            <p class="sub">Choose a username and password to get started.</p>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary btn-lg" type="submit">Create my account →</button>
+            </form>
+
+            <p class="alt">
+                Already registered? <a href="{% url 'users:login' %}">Log in instead</a><br>
+                <a href="{% url 'home' %}">← Back home</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

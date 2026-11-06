@@ -37,7 +37,7 @@
                 </form>
             {% else %}
                 <a class="btn btn-ghost" href="{% url 'users:login' %}">Login</a>
-                <a class="btn btn-primary" href="{% url 'courses:create_course' %}">Get Started</a>
+                <a class="btn btn-primary" href="{% url 'users:register' %}">Get Started</a>
             {% endif %}
         </div>
     </div>
@@ -85,6 +85,7 @@
                 <a href="{% url 'users:dashboard' %}">Dashboard</a>
                 <a href="{% url 'admin:index' %}">Admin</a>
             {% else %}
+                <a href="{% url 'users:register' %}">Create account</a>
                 <a href="{% url 'users:login' %}">Login</a>
                 <a href="{% url 'courses:create_course' %}">Create Course</a>
             {% endif %}
