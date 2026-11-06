@@ -1,34 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
-</head>
-<body>
-    <h1>Lectures</h1>
+{% extends "base.html" %}
+{% load static %}
 
-    <table border = 1 width="100%" >
-        <thead>
-            <tr>
-                <td>Name</td>
-                <td>Tutor</td>
-                <td>Time</td>
-            </tr>
-        </thead>
+{% block title %}Lecture Schedule{% endblock %}
 
-        <tbody>
-            {% for lecture in lectures %}
+{% block content %}
+<div class="page-head">
+    <div class="container">
+        <div class="breadcrumb"><a href="{% url 'home' %}">Home</a> / Schedule</div>
+        <h1>Lecture schedule</h1>
+        <p>When each class runs and who is teaching it — live sessions across the academy.</p>
+    </div>
+</div>
 
-        <tr>
-           <td>{{ lecture.name }}</td>
-           <td>{{ lecture.tutor }}</td>
-           <td>{{ lecture.time }}</td>
-        </tr>
-            {% endfor %}
+<section class="section">
+    <div class="container">
+        <div class="toolbar">
+            <h2>This week's lectures <span class="count-pill">{{ lectures|length }} sessions</span></h2>
+            <a class="btn btn-outline" href="{% url 'courses:course_list' %}">Browse self-paced courses</a>
+        </div>
 
-        </tbody>
-
-    </table>
-</body>
-</html>
+        <div class="table-wrap">
+            <table class="data">
+                <thead>
+                    <tr>
+                        <th style="width:40%;">Lecture</th>
+                        <th>Tutor</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lecture in lectures %}
+                    <tr>
+                        <td><strong>{{ lecture.name }}</strong></td>
+                        <td><span class="tag amber">👤 {{ lecture.tutor }}</span></td>
+                        <td>🕐 {{ lecture.time }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align:center; color:var(--muted); padding:34px;">
+                            No lectures scheduled yet — check back soon.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,32 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Dunis LMS</title>
-</head>
-<body>
-    <h2> Login - Dunis LMS</h2>
+{% extends "base.html" %}
+{% load static %}
 
-    {% comment %}
-      Bug fix: the page never showed form errors, so a failed login looked
-      like nothing happened. AuthenticationForm puts the
-      "Please enter a correct username and password..." message in form.errors.
-    {% endcomment %}
-    {% if form.errors %}
-        <p style="color: red;">Invalid username or password. Please try again.</p>
-    {% endif %}
+{% block title %}Login{% endblock %}
 
-    <form method="post">
-        {% csrf_token %}
-        <label for="id_username">Username</label>
-        <input type="text" name="username" id="id_username" required><br>
+{% block content %}
+<div class="auth-wrap">
+    <!-- Brand panel -->
+    <div class="auth-side">
+        <span class="eyebrow">Welcome back</span>
+        <h2>Log in and pick up<br>where you left off.</h2>
+        <p>Your courses, schedule and progress — all waiting for you.</p>
+        <ul>
+            <li>Access every published course</li>
+            <li>Track your learning from the dashboard</li>
+            <li>Managed by Dunistech Academy</li>
+        </ul>
+    </div>
 
-        <label for="id_password">Password</label>
-        <input type="password" name="password" id="id_password" required><br>
+    <!-- Form panel -->
+    <div class="auth-main">
+        <div class="auth-card">
+            <h1>Student login</h1>
+            <p class="sub">Enter your credentials to continue.</p>
 
-        <button type="submit">Login</button>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary btn-lg" type="submit">Log in →</button>
+            </form>
 
-    </form>
-</body>
-</html>
+            <p class="alt">
+                New here? <a href="{% url 'courses:create_course' %}">Create your first course</a> ·
+                <a href="{% url 'home' %}">Back home</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

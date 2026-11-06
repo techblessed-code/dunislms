@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home{% endblock %} · Dunis LMS</title>
+    <link rel="stylesheet" href="{% static 'css/lms.css' %}">
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+    <div class="container nav-inner">
+        <a class="brand" href="{% url 'home' %}">
+            <span class="brand-mark">🎓</span>
+            <span class="brand-text">Dunis<em>LMS</em></span>
+        </a>
+
+        <nav class="nav-links" id="navLinks">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'courses:course_list' %}">Courses</a>
+            <a href="{% url 'courses:course_table' %}">Schedule</a>
+            <a href="{% url 'about' %}">About</a>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'users:dashboard' %}">Dashboard</a>
+            {% endif %}
+        </nav>
+
+        <div class="nav-auth">
+            {% if request.user.is_authenticated %}
+                <span class="nav-user"><span class="avatar">{{ request.user.username|slice:":1"|upper }}</span>{{ request.user.username }}</span>
+                {# Logout must be a POST form since Django 5.0 (GET returns 405) #}
+                <form action="{% url 'users:logout' %}" method="post" class="inline-form">
+                    {% csrf_token %}
+                    <button class="btn btn-ghost" type="submit">Logout</button>
+                </form>
+            {% else %}
+                <a class="btn btn-ghost" href="{% url 'users:login' %}">Login</a>
+                <a class="btn btn-primary" href="{% url 'courses:create_course' %}">Get Started</a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+{# Flash messages: login success, signed-out, form feedback #}
+{% if messages %}
+    <div class="container messages-wrap">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- ================= PAGE CONTENT ================= -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+    <div class="container footer-grid">
+        <div>
+            <a class="brand footer-brand" href="{% url 'home' %}">
+                <span class="brand-mark">🎓</span>
+                <span class="brand-text">Dunis<em>LMS</em></span>
+            </a>
+            <p class="footer-tag">Structured learning, published by instructors,<br>consumed by students, proven by progress.</p>
+        </div>
+        <div>
+            <h4>Learn</h4>
+            <a href="{% url 'courses:course_list' %}">All Courses</a>
+            <a href="{% url 'courses:course_table' %}">Lecture Schedule</a>
+            <a href="{% url 'courses_cbv:course_list' %}">Course Management</a>
+        </div>
+        <div>
+            <h4>Academy</h4>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'blog' %}">Blog</a>
+            <a href="{% url 'course_crud_api' %}">Course API</a>
+        </div>
+        <div>
+            <h4>Account</h4>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'users:dashboard' %}">Dashboard</a>
+                <a href="{% url 'admin:index' %}">Admin</a>
+            {% else %}
+                <a href="{% url 'users:login' %}">Login</a>
+                <a href="{% url 'courses:create_course' %}">Create Course</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container footer-bottom">
+        <span>© 2026 Dunis LMS — built for learning by Dunistech Academy. Happy coding! 💻🚀</span>
+    </div>
+</footer>
+
+</body>
+</html>

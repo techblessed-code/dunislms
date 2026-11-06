@@ -1,148 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
 
+{% block title %}Course Management{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'courses_cbv/main.css' %}">
-</head>
-<body>
-    <div class="body">
+{% block content %}
+<div class="page-head">
+    <div class="container">
+        <div class="breadcrumb"><a href="{% url 'home' %}">Home</a> / Course Management</div>
+        <span class="mode-pill">Class-based views (CBV)</span>
+        <h1>Course management</h1>
+        <p>Create, inspect, update and delete courses — the full CRUD workflow built with generic class-based views.</p>
+    </div>
+</div>
 
-        <section class="page-hero">
-            <p class="eyebrow">Course Management</p>
-            <h1>Courses</h1>
-            <p class="page-subtitle">
-                Review the catalog and manage each course from one place.
-            </p>
-        </section>
-
-        <div class="course-grid">
-            {% if courses %}
-                {% for course in courses %}
-                    <article class="course-card">
-
-                        <div class="course-media">
-                            {% if course.image %}
-                                <img class="course-image"
-                                     src="{{ course.image.url }}"
-                                     alt="{{ course.title }}">
-                            {% else %}
-                                <div class="course-image placeholder">
-                                    No image
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <div class="course-content">
-                            <h3 class="course-title">
-                                <a href="{% url 'courses_cbv:course_detail' pk=course.pk %}">
-                                    {{ course.title }}
-                                </a>
-                            </h3>
-
-                            <p class="course-desc">
-                                {{ course.description|default_if_none:''|truncatechars:120 }}
-                            </p>
-
-                            <div class="course-meta-grid">
-
-                                <p class="course-meta">
-                                    <span class="course-meta-label">Duration</span>
-                                    <span class="course-meta-value">
-                                        {{ course.duration }}
-                                    </span>
-                                </p>
-
-                                <p class="course-meta">
-                                    <span class="course-meta-label">Instructor</span>
-                                    <span class="course-meta-value">
-                                        {% if course.instructor %}
-                                            {{ course.instructor.name }}
-                                        {% else %}
-                                            N/A
-                                        {% endif %}
-                                    </span>
-                                </p>
-
-                            </div>
-                        </div>
-
-                        <div class="course-actions">
-                            <a class="btn btn-primary icon-btn"
-                               href="{% url 'courses_cbv:course_detail' pk=course.pk %}">
-                                <span class="icon" aria-hidden="true">
-                                    <svg class="action-icon"
-                                         xmlns="http://www.w3.org/2000/svg"
-                                         viewBox="0 0 24 24"
-                                         width="24">
-                                    </svg>
-                                </span>
-                            </a>
-
-                            <a class="btn btn-secondary icon-btn"
-                               href="{% url 'courses_cbv:course_update' pk=course.pk %}">
-                                <span class="icon" aria-hidden="true">
-                                    <svg class="action-icon"
-                                         xmlns="http://www.w3.org/2000/svg"
-                                         viewBox="0 0 24 24"
-                                         width="24">
-                                    </svg>
-                                </span>
-                            </a>
-
-                            <a class="btn btn-danger icon-btn"
-                               href="{% url 'courses_cbv:course_delete' pk=course.pk %}">
-                                <span class="icon" aria-hidden="true">
-                                    <svg class="action-icon"
-                                         xmlns="http://www.w3.org/2000/svg"
-                                         viewBox="0 0 24 24"
-                                         width="24">
-                                    </svg>
-                                </span>
-                            </a>
-                        </div>
-
-                    </article>
-                {% endfor %}
-            {% else %}
-                <p class="empty-state">No courses available.</p>
-            {% endif %}
+<section class="section">
+    <div class="container">
+        <div class="toolbar">
+            <h2>All courses <span class="count-pill">{{ courses|length }} total</span></h2>
+            <a class="btn btn-primary" href="{% url 'courses_cbv:course_create' %}">＋ Create (CBV)</a>
         </div>
 
-        <nav class="course-nav">
-            <a class="btn btn-nav" href="{% url 'courses:course_list' %}">
-                Back
-            </a>
-
-            <a class="btn btn-nav btn-nav-primary"
-               href="{% url 'courses:create_course' %}">
-                Create Course
-            </a>
-
-            <a class="btn btn-nav" href="{% url 'courses:about' %}">
-                About
-            </a>
-
-            <a class="btn btn-nav" href="{% url 'admin:index' %}">
-                Admin
-            </a>
-
-            <a class="btn btn-nav" href="{% url 'users:login' %}">
-                Login
-            </a>
-
-            {% if not request.resolver_match or request.resolver_match.namespace != 'courses_cbv' %}
-                <a class="btn btn-nav"
-                   href="{% url 'courses_cbv:course_list' %}">
-                    CBV Course List
-                </a>
-            {% endif %}
-        </nav>
-
+        <div class="table-wrap">
+            <table class="data">
+                <thead>
+                    <tr>
+                        <th style="width:7%;">ID</th>
+                        <th style="width:32%;">Title</th>
+                        <th>Instructor</th>
+                        <th>Duration</th>
+                        <th style="width:24%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                    <tr>
+                        <td><span class="tag">#{{ course.id }}</span></td>
+                        <td><strong>{{ course.title }}</strong></td>
+                        <td>{{ course.instructor.name }}</td>
+                        <td>⏱ {{ course.duration }} hrs</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline" href="{% url 'courses_cbv:course_detail' course.pk %}">View</a>
+                            <a class="btn btn-sm btn-primary" href="{% url 'courses_cbv:course_update' course.pk %}">Edit</a>
+                            <a class="btn btn-sm btn-danger" href="{% url 'courses_cbv:course_delete' course.pk %}">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align:center; color:var(--muted); padding:34px;">
+                            No courses yet — create the first one.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</body>
-</html>
+</section>
+{% endblock %}

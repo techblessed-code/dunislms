@@ -1,22 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Form</title>
-</head>
-<body>
-    <h1>Create a New Course</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% comment %}
-          Bug fix: {% csrf_token %} used to be commented out here, so every
-          course-creation POST failed with a 403 (CSRF verification failed).
-        {% endcomment %}
-        {% csrf_token %}
+{% extends "base.html" %}
+{% load static %}
 
-        {{ form.as_p }}
-        <button type="submit">Create Course</button>
-        <a href="{% url 'courses:course_list' %}">Cancel</a>
-    </form>
-</body> 
-</html>
+{% block title %}Create Course{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Home</a> /
+            <a href="{% url 'courses:course_list' %}">Courses</a> / New
+        </div>
+        <h1>Create a new course</h1>
+        <p>Fill in the details below — the course appears in the catalog the moment you save it.</p>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="panel form-card">
+            <h3>Course information</h3>
+            <p class="form-intro">All fields marked by Django as required must be filled in.</p>
+
+            <form method="post" enctype="multipart/form-data">
+                {% comment %}
+                  Bug fix: {% csrf_token %} used to be commented out here, so every
+                  course-creation POST failed with a 403 (CSRF verification failed).
+                {% endcomment %}
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <div class="form-actions">
+                    <button class="btn btn-primary btn-lg" type="submit">Create course →</button>
+                    <a class="btn btn-ghost" style="color:var(--muted); border-color:var(--border);"
+                       href="{% url 'courses:course_list' %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

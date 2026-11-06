@@ -1,25 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Dunis LMS</title>
-</head>
-<body>
-    <h1>Welcome {{ user.username }}</h1>
-    Email = {{ request.user.email }}
-    {% comment %}
-      Logout must be a POST form: since Django 5.0 the built-in LogoutView
-      answers 405 to GET requests.
-    {% endcomment %}
-    <form action="{% url 'users:logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" style="pointer-events: stroke;">Logout</button>
-    </form>
+{% extends "base.html" %}
+{% load static %}
 
-    <p><a href="{% url 'courses:course_list' %}">Browse courses</a></p>
+{% block title %}Dashboard{% endblock %}
 
-    <h3>This is your unique dashboard allowing you to view your profile</h3>
+{% block content %}
+<div class="dash-head">
+    <div class="container">
+        <div class="hi">Student dashboard</div>
+        <h1>Welcome back, {{ user.username }} 👋</h1>
+        <p>Everything you can do in Dunis LMS, in one place.</p>
+    </div>
+</div>
 
-</body>
-</html>
+<section class="section" style="padding-top:0;">
+    <div class="container">
+
+        <!-- Profile facts -->
+        <div class="dash-grid">
+            <div class="quick-link" style="cursor:default;">
+                <div class="ic">👤</div>
+                <h3>{{ user.username }}</h3>
+                <p>Username · your sign-in identity</p>
+            </div>
+            <div class="quick-link" style="cursor:default;">
+                <div class="ic">📧</div>
+                <h3>{{ user.email|default:"No email set" }}</h3>
+                <p>Account email address</p>
+            </div>
+            <div class="quick-link" style="cursor:default;">
+                <div class="ic">🗓️</div>
+                <h3>Joined {{ user.date_joined|date:"M j, Y" }}</h3>
+                <p>Member since · {{ user.last_login|date:"M j, H:i"|default:"not yet signed in" }}</p>
+            </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="section-head" style="margin-top:46px;">
+            <h2 class="section-title">Quick actions</h2>
+            <p class="section-sub">Jump straight into any part of the platform.</p>
+        </div>
+
+        <div class="dash-grid" style="margin-top:0;">
+            <a class="quick-link" href="{% url 'courses:course_list' %}">
+                <div class="ic">📚</div>
+                <h3>Browse courses</h3>
+                <p>See the full catalog and open any course.</p>
+            </a>
+            <a class="quick-link" href="{% url 'courses:course_table' %}">
+                <div class="ic">🗓️</div>
+                <h3>Lecture schedule</h3>
+                <p>When classes run and who teaches them.</p>
+            </a>
+            <a class="quick-link" href="{% url 'courses:create_course' %}">
+                <div class="ic">➕</div>
+                <h3>Create a course</h3>
+                <p>Publish new material for students.</p>
+            </a>
+            <a class="quick-link" href="{% url 'courses_cbv:course_list' %}">
+                <div class="ic">🛠️</div>
+                <h3>Course management</h3>
+                <p>Update or delete courses (class-based views).</p>
+            </a>
+            <a class="quick-link" href="{% url 'course_crud_api' %}">
+                <div class="ic">🔌</div>
+                <h3>Course API</h3>
+                <p>JSON endpoint powering external clients.</p>
+            </a>
+            <a class="quick-link" href="{% url 'admin:index' %}">
+                <div class="ic">🛡️</div>
+                <h3>Django admin</h3>
+                <p>Raw data control (staff accounts only).</p>
+            </a>
+        </div>
+
+        <div class="cta" style="margin-top:44px;">
+            <h2>Keep the momentum going</h2>
+            <p>Pick a course from the catalog and continue learning.</p>
+            <a class="btn btn-light btn-lg" href="{% url 'courses:course_list' %}">Continue learning</a>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

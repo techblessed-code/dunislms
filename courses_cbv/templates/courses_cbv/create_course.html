@@ -1,49 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
 
+{% block title %}Create Course (CBV){% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Course</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'courses_cbv/main.css' %}">
-</head>
-<body>
-    <div class="body">
-        <div class="page-stack">
+{% block content %}
+<div class="page-head">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Home</a> /
+            <a href="{% url 'courses_cbv:course_list' %}">Course Management</a> / New
+        </div>
+        <span class="mode-pill">CreateView · CBV</span>
+        <h1>Create course</h1>
+        <p>Add a new course using the class-based view workflow.</p>
+    </div>
+</div>
 
-            <section class="page-hero">
-                <p class="eyebrow">Course Form</p>
-                <h1>Create Course</h1>
-                <p class="page-subtitle">
-                    Add a new course using the class-based view workflow.
-                </p>
-            </section>
+<section class="section">
+    <div class="container">
+        <div class="panel form-card">
+            <h3>Course information</h3>
+            <p class="form-intro">Enter the course details and submit when the form is ready.</p>
 
-            <section class="panel form-panel">
-                <p class="form-intro">
-                    Enter the course information below and submit the form when it is ready.
-                </p>
-
-                <form class="form-layout" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-
-                    <div class="form-actions">
-                        <button class="btn btn-primary" type="submit">
-                            Create Course
-                        </button>
-
-                        <a class="btn btn-nav"
-                           href="{% url 'courses_cbv:course_list' %}">
-                            Cancel
-                        </a>
-                    </div>
-                </form>
-            </section>
-
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-actions">
+                    <button class="btn btn-primary btn-lg" type="submit">Create course →</button>
+                    <a class="btn btn-ghost" style="color:var(--muted); border-color:var(--border);"
+                       href="{% url 'courses_cbv:course_list' %}">Cancel</a>
+                </div>
+            </form>
         </div>
     </div>
-</body>
-</html>
+</section>
+{% endblock %}

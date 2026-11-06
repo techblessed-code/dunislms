@@ -1,12 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-</head>
-<body>
-    <h1>About Dunistech Academy</h1>
-    <h2> Dunistech Academy is a Good place to kick up your coding Journey only when u have a Mr. Chris as your Tutor</h2>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="container">
+        <div class="breadcrumb"><a href="{% url 'home' %}">Home</a> / About</div>
+        <h1>About Dunistech Academy</h1>
+        <p>A good place to kick off your coding journey — only when you have a Mr. Chris as your tutor. 😉</p>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <h2 class="section-title">Our mission</h2>
+            <p class="section-sub">
+                Dunis LMS is the learning platform of Dunistech Academy: we turn complete beginners into
+                confident developers through structured courses, real projects and hands-on mentoring.
+            </p>
+        </div>
+
+        <div class="values">
+            <div class="value-card">
+                <div class="ic">🧭</div>
+                <h3>Structured paths</h3>
+                <p>Courses are ordered from fundamentals to advanced topics — you always know what to learn next.</p>
+            </div>
+            <div class="value-card">
+                <div class="ic">🛠️</div>
+                <h3>Learn by building</h3>
+                <p>Every concept ends in something you can run, show and be proud of in your portfolio.</p>
+            </div>
+            <div class="value-card">
+                <div class="ic">🤝</div>
+                <h3>Human mentoring</h3>
+                <p>Real tutors — led by Mr. Chris — answer questions and keep you moving when you're stuck.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+    <div class="container">
+        <div class="tutor-card">
+            <span class="avatar">C</span>
+            <div>
+                <h3>Mr. Chris</h3>
+                <div class="role">Lead Tutor · Dunistech Academy</div>
+                <p>
+                    Passionate about making code simple for beginners. From your first <code>&lt;div&gt;</code>
+                    to your first deployed Django app — he's got you.
+                </p>
+            </div>
+        </div>
+
+        <div class="cta" style="margin-top:34px;">
+            <h2>See what's on offer</h2>
+            <p>Browse the full catalog and find your first course.</p>
+            <a class="btn btn-light btn-lg" href="{% url 'courses:course_list' %}">View courses</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

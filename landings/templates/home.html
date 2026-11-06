@@ -1,31 +1,127 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    <h1>Welcome to Blessed Learning Management Systems lms</h1>
-    <p>Explore our courses and start learning</p>
+{% extends "base.html" %}
+{% load static %}
 
-    <ul>
-        <li><a href="{% url 'courses:course_list' %}">View Courses</a></li>
-        <li><a href="{% url 'blog' %}">Blog</a></li>
-        <li><a href="{% url 'courses:course_table' %}">Course Table</a></li>
-        <li><a href="{% url 'about' %}">About</a></li>
-        <li><a href="{% url 'users:login' %}">Login</a></li>
-        <li><a href="{% url 'users:dashboard' %}">Dashboard</a></li>
-        <li><a href="{% url 'course_crud_api' %}">Course API</a></li>
-    </ul>
+{% block title %}Home{% endblock %}
 
-    {% comment %}
-      Fixed: this used to be a plain <a href> to the logout URL. Since
-      Django 5.0 LogoutView only accepts POST, so the old link returned 405.
-    {% endcomment %}
-    <form action="{% url 'users:logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
-</body>
-</html>
+{% block content %}
+<!-- ============ HERO ============ -->
+<section class="hero">
+    <div class="container">
+        <span class="eyebrow">Dunistech Academy · Learning Management System</span>
+        <h1 class="hero-title">Master new skills with <span>expert-led courses</span> that fit your schedule.</h1>
+        <p class="hero-sub">
+            Browse structured courses, follow clear study paths, and track your progress —
+            all in one place built with Django.
+        </p>
+        <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="{% url 'courses:course_list' %}">Browse Courses →</a>
+            <a class="btn btn-ghost btn-lg" href="{% url 'users:login' %}">Student Login</a>
+        </div>
+    </div>
+</section>
+
+<!-- ============ STATS (live numbers from the database) ============ -->
+<div class="container">
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-num">{{ course_count }}</div>
+            <div class="stat-label">Courses published</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">{{ instructor_count }}</div>
+            <div class="stat-label">Expert instructors</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">{{ hour_count }}+</div>
+            <div class="stat-label">Hours of learning</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">24/7</div>
+            <div class="stat-label">Self-paced access</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============ FEATURED COURSES ============ -->
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <h2 class="section-title">Featured courses</h2>
+            <p class="section-sub">Fresh from the catalog — pick one and start learning today.</p>
+        </div>
+
+        <div class="grid">
+            {% for course in featured %}
+            <div class="card">
+                {% if course.image %}
+                <div class="card-img">
+                    <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                </div>
+                {% else %}
+                <div class="placeholder-img {% cycle '' 'alt' 'alt2' %}">📚</div>
+                {% endif %}
+                <div class="card-body">
+                    <span class="tag">Course</span>
+                    <h3 class="card-title" style="margin-top:10px;">{{ course.title }}</h3>
+                    <p class="card-text">{{ course.description|truncatewords:22 }}</p>
+                    <div class="card-meta">
+                        <span class="who">👤 {{ course.instructor.name }}</span>
+                        <span class="hrs">⏱ {{ course.duration }} hrs</span>
+                    </div>
+                    <a class="btn btn-outline" href="{% url 'courses:course_details' course.id %}">View details</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state" style="grid-column:1/-1;">
+                <div class="icon">📭</div>
+                <h3>No courses yet</h3>
+                <p>The catalog is empty — create the first course.</p>
+                <a class="btn btn-primary" href="{% url 'courses:create_course' %}">Create a course</a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="text-align:center; margin-top:34px;">
+            <a class="btn btn-primary btn-lg" href="{% url 'courses:course_list' %}">View all {{ course_count }} courses</a>
+        </div>
+    </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section" style="background:#fff; border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="container">
+        <div class="section-head">
+            <h2 class="section-title">How Dunis LMS works</h2>
+            <p class="section-sub">Three simple steps from signup to skill.</p>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="num">1</div>
+                <h3>Browse the catalog</h3>
+                <p>Explore every published course with clear durations, descriptions and instructors.</p>
+            </div>
+            <div class="step">
+                <div class="num">2</div>
+                <h3>Pick your course</h3>
+                <p>Open a course page to see the full description, instructor profile and study hours.</p>
+            </div>
+            <div class="step">
+                <div class="num">3</div>
+                <h3>Learn &amp; track</h3>
+                <p>Log in to your dashboard, follow the lectures, and watch your progress grow.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="section">
+    <div class="container">
+        <div class="cta">
+            <h2>Ready to start your coding journey?</h2>
+            <p>Join Dunis LMS and turn curiosity into working projects — one course at a time.</p>
+            <a class="btn btn-light btn-lg" href="{% url 'courses:course_list' %}">Start learning free</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

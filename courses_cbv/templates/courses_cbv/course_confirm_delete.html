@@ -1,47 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm Delete</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'courses_cbv/main.css' %}">
-</head>
-<body>
-    <div class="body">
-        <div class="page-stack">
+{% block title %}Delete {{ course.title }}{% endblock %}
 
-            <section class="page-hero">
-                <p class="eyebrow">Delete Course</p>
-                <h1>Delete "{{ object.title }}"?</h1>
-                <p class="page-subtitle">
-                    This action is permanent, so take a moment to be sure.
-                </p>
-            </section>
+{% block content %}
+<div class="page-head">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Home</a> /
+            <a href="{% url 'courses_cbv:course_list' %}">Course Management</a> / Delete
+        </div>
+        <span class="mode-pill">DeleteView · CBV</span>
+        <h1>Confirm deletion</h1>
+        <p>This removes the row from the database permanently — there is no undo.</p>
+    </div>
+</div>
 
-            <section class="panel danger-panel form-panel">
-                <p class="danger-copy">
-                    Once this course is deleted, it cannot be recovered.
-                </p>
+<section class="section">
+    <div class="container">
+        <div class="panel form-card" style="border-left:5px solid var(--red);">
+            <div style="text-align:center; font-size:44px;">🗑️</div>
+            <h3 style="text-align:center;">Delete “{{ course.title }}”?</h3>
+            <p style="text-align:center; color:var(--muted); margin-top:8px;">
+                Course #{{ course.pk }} · {{ course.duration }} hours · {{ course.instructor.name }}<br>
+                You're about to permanently delete this course.
+            </p>
 
-                <form method="post">
-                    {% csrf_token %}
-
-                    <div class="form-actions">
-                        <button class="btn btn-danger" type="submit">
-                            Confirm Delete
-                        </button>
-
-                        <a class="btn btn-nav"
-                           href="{% url 'courses_cbv:course_detail' pk=object.pk %}">
-                            Cancel
-                        </a>
-                    </div>
-                </form>
-            </section>
-
+            <form method="post" style="margin-top:24px;">
+                {% csrf_token %}
+                <div class="form-actions">
+                    <button class="btn btn-danger btn-lg" type="submit">Yes, delete it</button>
+                    <a class="btn btn-outline" href="{% url 'courses_cbv:course_detail' course.pk %}">Keep course</a>
+                </div>
+            </form>
         </div>
     </div>
-</body>
-</html>
+</section>
+{% endblock %}

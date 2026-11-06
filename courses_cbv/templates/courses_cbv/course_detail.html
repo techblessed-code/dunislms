@@ -1,84 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ course.title }}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'courses_cbv/main.css' %}">
-</head>
-<body>
-    <div class="body">
-        <div class="page-stack">
+{% block title %}{{ course.title }} (CBV){% endblock %}
 
-            <section class="page-hero">
-                <p class="eyebrow">Course Detail</p>
-                <h1>{{ course.title }}</h1>
-                <p class="page-subtitle">
-                    Review the full course information and manage this record from the class-based view.
-                </p>
-            </section>
+{% block content %}
+<div class="page-head">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Home</a> /
+            <a href="{% url 'courses_cbv:course_list' %}">Course Management</a> /
+            {{ course.title }}
+        </div>
+        <span class="mode-pill">DetailView · CBV</span>
+        <h1>{{ course.title }}</h1>
+        <p>Course #{{ course.pk }} · {{ course.duration }} hours · {{ course.instructor.name }}</p>
+    </div>
+</div>
 
-            <section class="panel detail-layout">
-
-                <div class="detail-media">
-                    {% if course.image %}
-                        <img src="{{ course.image.url }}" alt="{{ course.title }}">
-                    {% else %}
-                        <div class="detail-placeholder">No image available</div>
-                    {% endif %}
+<section class="section">
+    <div class="container">
+        <div class="detail-grid">
+            <div>
+                {% if course.image %}
+                <img class="detail-hero-img" src="{{ course.image.url }}" alt="{{ course.title }}">
+                {% else %}
+                <div class="placeholder-img" style="height:300px; border-radius:14px; box-shadow:var(--shadow);">🎓</div>
+                {% endif %}
+                <div class="panel" style="margin-top:24px;">
+                    <h3>Description</h3>
+                    <p>{{ course.description }}</p>
                 </div>
+            </div>
 
-                <div class="detail-content">
-                    <h2 class="detail-title">{{ course.title }}</h2>
+            <aside class="panel info-card">
+                <h3>Manage this course</h3>
+                <div class="info-row"><span class="k">🆔 Primary key</span><span class="v">{{ course.pk }}</span></div>
+                <div class="info-row"><span class="k">⏱ Duration</span><span class="v">{{ course.duration }} hours</span></div>
+                <div class="info-row"><span class="k">👤 Instructor</span><span class="v">{{ course.instructor.name }}</span></div>
 
-                    <div class="course-meta-grid">
-
-                        <p class="course-meta">
-                            <span class="course-meta-label">Duration</span>
-                            <span class="course-meta-value">{{ course.duration }} hours</span>
-                        </p>
-
-                        <p class="course-meta">
-                            <span class="course-meta-label">Instructor</span>
-                            <span class="course-meta-value">
-                                {% if course.instructor %}
-                                    {{ course.instructor.name }}
-                                {% else %}
-                                    N/A
-                                {% endif %}
-                            </span>
-                        </p>
-
-                    </div>
-
-                    <p class="detail-description">
-                        {{ course.description|default_if_none:"No description available." }}
-                    </p>
-
-                    <div class="detail-actions">
-                        <a class="btn btn-nav btn-nav-primary"
-                           href="{% url 'courses_cbv:course_list' %}">
-                            Back to Courses
-                        </a>
-
-                        <a class="btn btn-secondary"
-                           href="{% url 'courses_cbv:course_update' pk=course.pk %}">
-                            Update
-                        </a>
-
-                        <a class="btn btn-danger"
-                           href="{% url 'courses_cbv:course_delete' pk=course.pk %}">
-                            Delete
-                        </a>
-                    </div>
-
-                </div>
-
-            </section>
-
+                <a class="btn btn-primary btn-lg" href="{% url 'courses_cbv:course_update' course.pk %}">✏️ Update course</a>
+                <a class="btn btn-danger" href="{% url 'courses_cbv:course_delete' course.pk %}">🗑️ Delete course</a>
+                <a class="btn btn-ghost" style="color:var(--muted); border-color:var(--border);"
+                   href="{% url 'courses_cbv:course_list' %}">← Back to list</a>
+            </aside>
         </div>
     </div>
-</body>
-</html>
+</section>
+{% endblock %}

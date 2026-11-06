@@ -1,19 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Details</title>
-</head>
-<body>
-    <p><a href="{% url 'courses:course_list' %}">&larr; Back to courses</a></p>
+{% extends "base.html" %}
+{% load static %}
 
-    <h2>{{ course.title}}</h2>
-    <p><strong>Duration:</strong> {{ course.duration}}</p>
-    <p><strong>Description:</strong> {{ course.description}}</p>
-    <p><strong>Instructor:</strong> {{ course.instructor.name}}</p>
-    {% if course.image %}
-       <img src="{{ course.image.url }}" alt="{{ course.title}}" width="300">
-    {% endif %}
-</body>
-</html>
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Home</a> /
+            <a href="{% url 'courses:course_list' %}">Courses</a> /
+            {{ course.title }}
+        </div>
+        <h1>{{ course.title }}</h1>
+        <p>Course #{{ course.id }} · taught by {{ course.instructor.name }}</p>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="detail-grid">
+
+            <!-- LEFT: content -->
+            <div>
+                {% if course.image %}
+                <img class="detail-hero-img" src="{{ course.image.url }}" alt="{{ course.title }}">
+                {% else %}
+                <div class="placeholder-img" style="height:300px; border-radius:14px; box-shadow:var(--shadow);">📚</div>
+                {% endif %}
+
+                <div class="panel" style="margin-top:24px;">
+                    <h3>About this course</h3>
+                    <p>{{ course.description }}</p>
+                </div>
+
+                <div class="panel">
+                    <h3>What you'll gain</h3>
+                    <p>
+                        In <strong>{{ course.duration }} hours</strong> of structured material with
+                        <strong>{{ course.instructor.name }}</strong>, you'll move from the fundamentals to
+                        practical, portfolio-ready skills — with room to learn at your own pace.
+                    </p>
+                </div>
+            </div>
+
+            <!-- RIGHT: facts card -->
+            <aside class="panel info-card">
+                <h3>Course facts</h3>
+
+                <div class="instructor-line">
+                    <span class="avatar">{{ course.instructor.name|slice:":1"|upper }}</span>
+                    <div>
+                        <div class="name">{{ course.instructor.name }}</div>
+                        <div class="role">Instructor</div>
+                    </div>
+                </div>
+
+                <div class="info-row"><span class="k">⏱ Duration</span><span class="v">{{ course.duration }} hours</span></div>
+                <div class="info-row"><span class="k">🆔 Course ID</span><span class="v">#{{ course.id }}</span></div>
+                <div class="info-row"><span class="k">📶 Level</span><span class="v">Beginner → Intermediate</span></div>
+                <div class="info-row"><span class="k">📜 Certificate</span><span class="v">On completion</span></div>
+
+                <a class="btn btn-primary btn-lg" href="{% url 'users:dashboard' %}">Open in dashboard</a>
+                <a class="btn btn-outline" href="{% url 'courses:course_list' %}">← All courses</a>
+                {# Staff edit shortcut — same form as the CBV update view #}
+                <a class="btn btn-ghost" style="color:var(--muted); border-color:var(--border);"
+                   href="{% url 'courses_cbv:course_update' course.id %}">✏️ Edit this course</a>
+            </aside>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
