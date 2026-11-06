@@ -7,8 +7,9 @@ Run this once after `migrate` to reproduce the full demo catalog:
     python manage.py seed_courses
 
 It is idempotent (get_or_create) - running it twice does no harm.
-It also removes the duplicate "English" practice entries that were
-typed during testing, so the catalog always ends up clean.
+It also removes the practice entries typed while testing the forms
+(the duplicate "English" and "math/Mathematics" courses), because the
+catalog of this academy is software / full-stack courses only.
 """
 
 from django.core.management.base import BaseCommand
@@ -65,8 +66,12 @@ class Command(BaseCommand):
     help = "Seed the demo course catalog (and remove duplicate English practice entries)."
 
     def handle(self, *args, **options):
-        # 1. Clean up the junk duplicates typed while testing the forms.
-        doomed = Course.objects.filter(title__iexact="english")
+        # 1. Clean up the junk typed while testing the forms.
+        #    Rule: only software / full-stack courses belong in this catalog,
+        #    so the English and math practice entries always get removed.
+        doomed = Course.objects.filter(
+            title__iexact="english"
+        ) | Course.objects.filter(title__in=["math", "Mathematics"])
         removed = doomed.count()
         doomed.delete()
 
